@@ -5,10 +5,10 @@ const URL = require("./models/url");
 const urlRoute = require("./routes/url");
 const staticRoute = require('./routes/staticRouter')
 const userRoute = require('./routes/user')
-
+const env=require('dotenv').config();
 const app = express();
-const PORT = 8001;
-connectToMongoDB("mongodb://127.0.0.1:27017/short_url").then(() =>
+const PORT = env.parsed.PORT;
+connectToMongoDB(env.parsed.DB_URL).then(() =>
   console.log("Mongodb connected")
 );
 
