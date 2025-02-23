@@ -8,7 +8,7 @@ const userRoute = require('./routes/user')
 const env=require('dotenv').config();
 const app = express();
 const PORT = env.parsed.PORT;
-connectToMongoDB(env.parsed.DB_URL).then(() =>
+connectToMongoDB(env.parsed.DB_LOCAL_URL).then(() =>
   console.log("Mongodb connected")
 );
 
@@ -52,4 +52,4 @@ app.get("/:shortId", async (req, res) => {
 
 
 
-app.listen(process.env.PORT, () => console.log(`server started at PORT: ${PORT}`));
+app.listen(env.parsed.PORT, () => console.log(`server started at PORT: ${PORT}`));
