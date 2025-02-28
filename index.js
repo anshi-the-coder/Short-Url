@@ -1,9 +1,12 @@
 const express = require("express");
 const path = require('path')
-const { connectToMongoDB } = require("./connection"); 
+const { connectToMongoDB } = require("./connection");
+const {restrictToLoggedinUserOnly,checkAuth} = require('./middleware/auth') 
 const URL = require("./models/url");
+const cookieParser= require('cookie-parser')
 const urlRoute = require("./routes/url");
 const staticRoute = require('./routes/staticRouter')
+
 const userRoute = require('./routes/user')
 const env=require('dotenv').config();
 const app = express();
@@ -17,10 +20,12 @@ app.set("views", path.resolve("./views"))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}))
+app.use(cookieParser())
 
-app.use("/url", urlRoute);
+
+app.use("/url", restrictToLoggedinUserOnly, urlRoute);
 app.use("/user", userRoute);
-app.use("/", staticRoute)
+app.use("/",checkAuth, staticRoute)
 
 app.get("/:shortId", async (req, res) => {
   try {
